@@ -1,0 +1,14 @@
+# Backend
+auth-backend/target/
+auth-backend/*.log
+
+# Frontend
+auth-frontend/node_modules/
+auth-frontend/dist/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
