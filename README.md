@@ -172,13 +172,23 @@ npm run dev
 
 * Register a new user (USER / ADMIN)
 * Login with credentials
-* Verify role-based content on dashboard
+* Verify role-based content on the dashboard
 
 ---
 
 ## 📸 Screenshots
 
-(Add screenshots of login, register, dashboard here)
+### Login Page
+![login](DemoImages/login.png)
+
+### Registration Page
+![register](DemoImages/register.png)
+
+### User Dashboard
+![Dashboard-user](DemoImages/dashboard-user.png)
+
+### Admin Dashboard
+![Dashboard-admin](DemoImages/dashboard-admin.png)
 
 ---
 
