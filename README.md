@@ -70,9 +70,79 @@ The backend is built using Spring Boot with JWT authentication, and the frontend
 
 ## 📂 Project Structure
 
-auth-system/
-├── auth-backend/
-├── auth-frontend/
+```
+authsystem/
+│
+├── auth-backend/                  # Spring Boot Backend
+│   ├── src/main/java/com/sonam/authsystem/
+│   │   ├── config/               # Swagger configuration
+│   │   │   └── SwaggerConfig.java
+│   │   │
+│   │   ├── controller/           # REST Controllers
+│   │   │   ├── AuthController.java
+│   │   │   └── ApiController.java
+│   │   │
+│   │   ├── dto/                  # Request & Response DTOs
+│   │   │   ├── AuthResponse.java
+│   │   │   ├── LoginRequest.java
+│   │   │   └── RegisterRequest.java
+│   │   │
+│   │   ├── entity/               # Database Entities
+│   │   │   ├── User.java
+│   │   │   └── Role.java
+│   │   │
+│   │   ├── repository/           # JPA Repositories
+│   │   │   └── UserRepository.java
+│   │   │
+│   │   ├── security/             # Security & JWT
+│   │   │   ├── JwtFilter.java
+│   │   │   ├── JwtUtil.java
+│   │   │   └── SecurityConfig.java
+│   │   │
+│   │   ├── service/              # Business Logic
+│   │   │   ├── AuthService.java
+│   │   │   └── UserDetailsServiceImpl.java
+│   │   │
+│   │   └── AuthsystemApplication.java
+│   │
+│   ├── src/main/resources/
+│   │   └── application.properties
+│   │
+│   ├── pom.xml
+│   └── mvnw / mvnw.cmd
+│
+├── auth-frontend/                # React + TypeScript Frontend 
+│   ├── src/
+│   │   ├── api/                  # Axios setup
+│   │   │   └── axios.ts
+│   │   │
+│   │   ├── assets/               # Static assets
+│   │   │   └── (images, icons)
+│   │   │
+│   │   ├── context/              # Auth context
+│   │   │   └── AuthContext.tsx
+│   │   │
+│   │   ├── pages/                # Application pages
+│   │   │   ├── LoginPage.tsx
+│   │   │   ├── RegisterPage.tsx
+│   │   │   └── DashboardPage.tsx
+│   │   │
+│   │   ├── types/                # TypeScript types
+│   │   │   └── auth.ts
+│   │   │
+│   │   ├── App.tsx               # Main App component
+│   │   ├── main.tsx              # Entry point
+│   │   └── index.css
+│   │
+│   ├── index.html
+│   ├── package.json
+│   ├── tailwind.config.js
+│   └── vite.config.ts
+│
+├── .gitignore
+└── README.md
+```
+
 
 ---
 
