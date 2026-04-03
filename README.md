@@ -14,7 +14,7 @@ The backend is built using Spring Boot with JWT authentication, and the frontend
 ### Backend
 
 * Java 17
-* Spring Boot
+* Spring Boot 3
 * Spring Security + JWT
 * Spring Data JPA (Hibernate)
 * H2 Database
@@ -39,7 +39,7 @@ The backend is built using Spring Boot with JWT authentication, and the frontend
 
 * User Registration (Name, Email, Password, Role)
 * User Login with JWT
-* JWT stored in localStorage
+* JWT is stored in localStorage
 * Token attached to all protected API calls
 
 ### Authorization (RBAC)
@@ -73,33 +73,33 @@ The backend is built using Spring Boot with JWT authentication, and the frontend
 ```
 authsystem/
 │
-├── auth-backend/                  # Spring Boot Backend
+├── auth-backend/                 #Spring boot 
 │   ├── src/main/java/com/sonam/authsystem/
-│   │   ├── config/               # Swagger configuration
+│   │   ├── config/               
 │   │   │   └── SwaggerConfig.java
 │   │   │
-│   │   ├── controller/           # REST Controllers
+│   │   ├── controller/         
 │   │   │   ├── AuthController.java
 │   │   │   └── ApiController.java
 │   │   │
-│   │   ├── dto/                  # Request & Response DTOs
+│   │   ├── dto/                 
 │   │   │   ├── AuthResponse.java
 │   │   │   ├── LoginRequest.java
 │   │   │   └── RegisterRequest.java
 │   │   │
-│   │   ├── entity/               # Database Entities
+│   │   ├── entity/              
 │   │   │   ├── User.java
 │   │   │   └── Role.java
 │   │   │
-│   │   ├── repository/           # JPA Repositories
+│   │   ├── repository/           
 │   │   │   └── UserRepository.java
 │   │   │
-│   │   ├── security/             # Security & JWT
+│   │   ├── security/             
 │   │   │   ├── JwtFilter.java
 │   │   │   ├── JwtUtil.java
 │   │   │   └── SecurityConfig.java
 │   │   │
-│   │   ├── service/              # Business Logic
+│   │   ├── service/             
 │   │   │   ├── AuthService.java
 │   │   │   └── UserDetailsServiceImpl.java
 │   │   │
@@ -113,25 +113,25 @@ authsystem/
 │
 ├── auth-frontend/                # React + TypeScript Frontend 
 │   ├── src/
-│   │   ├── api/                  # Axios setup
+│   │   ├── api/                  
 │   │   │   └── axios.ts
 │   │   │
-│   │   ├── assets/               # Static assets
+│   │   ├── assets/              
 │   │   │   └── (images, icons)
 │   │   │
-│   │   ├── context/              # Auth context
+│   │   ├── context/             
 │   │   │   └── AuthContext.tsx
 │   │   │
-│   │   ├── pages/                # Application pages
+│   │   ├── pages/                
 │   │   │   ├── LoginPage.tsx
 │   │   │   ├── RegisterPage.tsx
 │   │   │   └── DashboardPage.tsx
 │   │   │
-│   │   ├── types/                # TypeScript types
+│   │   ├── types/               
 │   │   │   └── auth.ts
 │   │   │
-│   │   ├── App.tsx               # Main App component
-│   │   ├── main.tsx              # Entry point
+│   │   ├── App.tsx               
+│   │   ├── main.tsx              
 │   │   └── index.css
 │   │
 │   ├── index.html
@@ -195,7 +195,6 @@ npm run dev
 ## 📌 Notes
 
 * JWT is used for authentication
-* Passwords are securely stored using BCrypt
 * Role-based access is handled using Spring Security
 
 ---
