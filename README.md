@@ -11,7 +11,7 @@ The backend is built using Spring Boot with JWT authentication, and the frontend
 
 ## 🎥 Demo Video
 
-[Watch Here]([YOUR_DRIVE_LINK](https://drive.google.com/file/d/1CHiWJbIFPhekoOGYgsBZep_LtpUTJdlk/view?usp=drive_link))
+[Watch Here]((https://drive.google.com/file/d/1CHiWJbIFPhekoOGYgsBZep_LtpUTJdlk/view?usp=drive_link))
 
 ## ⚙️ Tech Stack
 
