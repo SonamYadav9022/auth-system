@@ -12,3 +12,7 @@ auth-frontend/dist/
 
 # OS
 .DS_Store
+
+# Env
+.env
+auth-backend/.env

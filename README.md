@@ -154,9 +154,10 @@ authsystem/
 
 ### Backend
 
-1. Open backend in IntelliJ
-2. Run the application
-3. Server runs on: `http://localhost:8080`
+1. Copy `auth-backend/.env.example` to `auth-backend/.env` and set your own `JWT_SECRET` (or export it as an environment variable). A dev fallback is included so the app still runs without this step, but don't rely on it outside your machine.
+2. Open backend in IntelliJ
+3. Run the application
+4. Server runs on: `http://localhost:8080`
 
 ### Frontend
 
