@@ -24,6 +24,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final RefreshTokenService refreshTokenService;
 
     @Value("${security.login.max-attempts}")
     private int maxAttempts;
@@ -45,8 +46,9 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
 
-        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
-        return new AuthResponse(token, user.getName(), user.getEmail(), user.getRole());
+        String accessToken = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        String refreshToken = refreshTokenService.createToken(user);
+        return new AuthResponse(accessToken, refreshToken, user.getName(), user.getEmail(), user.getRole());
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -70,8 +72,20 @@ public class AuthService {
 
         resetFailedAttempts(user);
 
-        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
-        return new AuthResponse(token, user.getName(), user.getEmail(), user.getRole());
+        String accessToken = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        String refreshToken = refreshTokenService.createToken(user);
+        return new AuthResponse(accessToken, refreshToken, user.getName(), user.getEmail(), user.getRole());
+    }
+
+    public AuthResponse refresh(String refreshToken) {
+        RefreshTokenService.RotationResult result = refreshTokenService.rotate(refreshToken);
+        User user = result.user();
+        String accessToken = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        return new AuthResponse(accessToken, result.rawToken(), user.getName(), user.getEmail(), user.getRole());
+    }
+
+    public void logout(String refreshToken) {
+        refreshTokenService.revoke(refreshToken);
     }
 
     private boolean isLocked(User user) {

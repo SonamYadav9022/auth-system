@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.sonam.authsystem.dto.AuthResponse;
 import com.sonam.authsystem.dto.LoginRequest;
+import com.sonam.authsystem.dto.RefreshRequest;
 import com.sonam.authsystem.dto.RegisterRequest;
 import com.sonam.authsystem.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,5 +38,18 @@ public class AuthController {
         // Fixed the variable name from loginRequest to request
         logger.info("Login attempt for email: {}", request.getEmail());
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("/refresh")
+    @Operation(summary = "Exchange a valid refresh token for a new access token (rotates the refresh token too)")
+    public ResponseEntity<AuthResponse> refresh(@Valid @RequestBody RefreshRequest request) {
+        return ResponseEntity.ok(authService.refresh(request.getRefreshToken()));
+    }
+
+    @PostMapping("/logout")
+    @Operation(summary = "Revoke a refresh token")
+    public ResponseEntity<Void> logout(@Valid @RequestBody RefreshRequest request) {
+        authService.logout(request.getRefreshToken());
+        return ResponseEntity.noContent().build();
     }
 }

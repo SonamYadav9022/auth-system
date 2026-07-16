@@ -15,7 +15,7 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expiration}")
+    @Value("${jwt.access-token-expiration-ms}")
     private long expiration;
 
     private SecretKey getSigningKey() {
