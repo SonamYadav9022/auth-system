@@ -11,7 +11,8 @@ export interface LoginRequest {
 }
 
 export interface AuthResponse {
-  token: string;
+  accessToken: string;
+  refreshToken: string;
   name: string;
   email: string;
   role: "USER" | "ADMIN";

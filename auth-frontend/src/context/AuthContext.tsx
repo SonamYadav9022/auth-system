@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 import type { AuthResponse } from "../types/auth";
+import api from "../api/axios";
 
 interface AuthContextType {
   user: AuthResponse | null;
@@ -17,13 +18,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const login = (data: AuthResponse) => {
-    localStorage.setItem("token", data.token);
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
     localStorage.setItem("user", JSON.stringify(data));
     setUser(data);
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (refreshToken) {
+      // Best-effort: revoke it server-side so it can't be replayed, but
+      // don't make the user wait on the network to log out locally.
+      api.post("/api/auth/logout", { refreshToken }).catch(() => {});
+    }
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
     setUser(null);
   };
