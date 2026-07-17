@@ -1,11 +1,14 @@
 package com.sonam.authsystem.controller;
 
 import com.sonam.authsystem.dto.UserSummaryResponse;
+import com.sonam.authsystem.entity.AuditEventType;
 import com.sonam.authsystem.entity.User;
 import com.sonam.authsystem.repository.UserRepository;
+import com.sonam.authsystem.service.AuditLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,6 +30,7 @@ import java.util.List;
 public class AdminController {
 
     private final UserRepository userRepository;
+    private final AuditLogService auditLogService;
 
     @GetMapping
     @PreAuthorize("hasAuthority('admin:read')")
@@ -41,7 +45,8 @@ public class AdminController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('admin:manage-users')")
     @Operation(summary = "Delete a user account", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<?> deleteUser(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<?> deleteUser(@PathVariable Long id, Authentication authentication,
+                                         HttpServletRequest httpRequest) {
         User target = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -50,6 +55,18 @@ public class AdminController {
         }
 
         userRepository.delete(target);
+        auditLogService.record(AuditEventType.USER_DELETED, target.getEmail(),
+                clientIp(httpRequest), httpRequest.getHeader("User-Agent"),
+                "Deleted by " + authentication.getName());
+
         return ResponseEntity.noContent().build();
+    }
+
+    private String clientIp(HttpServletRequest request) {
+        String forwarded = request.getHeader("X-Forwarded-For");
+        if (forwarded != null && !forwarded.isBlank()) {
+            return forwarded.split(",")[0].trim();
+        }
+        return request.getRemoteAddr();
     }
 }

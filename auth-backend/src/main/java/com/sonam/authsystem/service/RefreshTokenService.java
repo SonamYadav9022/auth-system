@@ -1,5 +1,6 @@
 package com.sonam.authsystem.service;
 
+import com.sonam.authsystem.entity.AuditEventType;
 import com.sonam.authsystem.entity.RefreshToken;
 import com.sonam.authsystem.entity.User;
 import com.sonam.authsystem.repository.RefreshTokenRepository;
@@ -15,12 +16,14 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
+    private final AuditLogService auditLogService;
 
     @Value("${security.refresh.expiration-days}")
     private long expirationDays;
@@ -47,12 +50,14 @@ public class RefreshTokenService {
      * quietly failing, every refresh token for that user is revoked.
      */
     @Transactional
-    public RotationResult rotate(String rawToken) {
+    public RotationResult rotate(String rawToken, String ipAddress, String userAgent) {
         RefreshToken stored = refreshTokenRepository.findByTokenHash(hash(rawToken))
                 .orElseThrow(() -> new BadCredentialsException("Invalid refresh token"));
 
         if (stored.isRevoked()) {
             refreshTokenRepository.revokeAllForUser(stored.getUser().getId());
+            auditLogService.record(AuditEventType.TOKEN_REUSE_DETECTED, stored.getUser().getEmail(),
+                    ipAddress, userAgent, "Rotated refresh token was reused - all sessions revoked");
             throw new BadCredentialsException("Refresh token reuse detected, all sessions revoked");
         }
 
@@ -66,11 +71,13 @@ public class RefreshTokenService {
         return new RotationResult(stored.getUser(), createToken(stored.getUser()));
     }
 
-    public void revoke(String rawToken) {
-        refreshTokenRepository.findByTokenHash(hash(rawToken))
-                .ifPresent(t -> {
+    /** Returns the email of the user the revoked token belonged to, if it existed. */
+    public Optional<String> revoke(String rawToken) {
+        return refreshTokenRepository.findByTokenHash(hash(rawToken))
+                .map(t -> {
                     t.setRevoked(true);
                     refreshTokenRepository.save(t);
+                    return t.getUser().getEmail();
                 });
     }
 

@@ -30,13 +30,14 @@ public class PermissionSeeder implements CommandLineRunner {
             "user:update", "Update your own profile",
             "user:delete", "Delete a user account",
             "admin:read", "View admin-only content",
-            "admin:manage-users", "List and remove any user account"
+            "admin:manage-users", "List and remove any user account",
+            "audit:read", "View the security audit log"
     );
 
     private static final Map<Role, List<String>> ROLE_PERMISSIONS = Map.of(
             Role.USER, List.of("user:read", "user:update"),
             Role.ADMIN, List.of("user:read", "user:update", "user:delete",
-                    "admin:read", "admin:manage-users")
+                    "admin:read", "admin:manage-users", "audit:read")
     );
 
     @Override
